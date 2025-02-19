@@ -2,11 +2,11 @@
 
 
 Thành viên nhóm:
-1_Trần Đăng Khoa_21810540524
-2_Phạm Sơn Tùng_21810540479
-3_Mai Đức Dũng_21810540474
-4_Lê Quang Thanh_21810540471
-5_Vương Quốc Đạt_21810540424
+- Trần Đăng Khoa_21810540524
+- Phạm Sơn Tùng_21810540479
+- Mai Đức Dũng_21810540474
+- Lê Quang Thanh_21810540471
+- Vương Quốc Đạt_21810540424
 
 Lý do lựa trọn đề tài: 
 Trong nhiều môi trường khác nhau như kho lạnh, phòng máy chủ, phòng thí nghiệm hoặc nhà kính, nhiệt độ và độ ẩm đóng vai trò quan trọng trong việc duy trì điều kiện tối ưu cho thiết bị, hàng hóa hoặc sinh vật bên trong. Việc theo dõi và kiểm soát các thông số này giúp:
