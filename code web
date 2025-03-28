@@ -1,1 +1,125 @@
 
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 800px;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            margin: auto;
+        }
+        h2 {
+            color: #333;
+        }
+        .sensor-container {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 20px;
+        }
+        .sensor-box {
+            background: #007bff;
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            width: 45%;
+            font-size: 1.5rem;
+        }
+        .chart-container {
+            margin-top: 20px;
+        }
+        canvas {
+            max-width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>ESP32 DHT Sensor Data</h2>
+        <div class="sensor-container">
+            <div class="sensor-box" id="temp-box">Temperature: <span id="temperature">--</span>°C</div>
+            <div class="sensor-box" id="humidity-box">Humidity: <span id="humidity">--</span>%</div>
+        </div>
+        <div class="chart-container">
+            <canvas id="tempChart"></canvas>
+            <canvas id="humidityChart"></canvas>
+        </div>
+    </div>
+    
+    <script>
+        const tempCtx = document.getElementById('tempChart').getContext('2d');
+        const humidityCtx = document.getElementById('humidityChart').getContext('2d');
+        
+        const tempChart = new Chart(tempCtx, {
+            type: 'line',
+            data: {
+                labels: [],
+                datasets: [{
+                    label: 'Temperature (°C)',
+                    borderColor: 'red',
+                    backgroundColor: 'rgba(255, 0, 0, 0.2)',
+                    data: []
+                }]
+            }
+        });
+        
+        const humidityChart = new Chart(humidityCtx, {
+            type: 'line',
+            data: {
+                labels: [],
+                datasets: [{
+                    label: 'Humidity (%)',
+                    borderColor: 'blue',
+                    backgroundColor: 'rgba(0, 0, 255, 0.2)',
+                    data: []
+                }]
+            }
+        });
+        
+        function updateData() {
+            fetch('/temperature')
+                .then(response => response.text())
+                .then(temp => {
+                    let time = new Date().toLocaleTimeString();
+                    document.getElementById("temperature").innerText = temp;
+                    tempChart.data.labels.push(time);
+                    tempChart.data.datasets[0].data.push(parseFloat(temp));
+                    if (tempChart.data.labels.length > 10) {
+                        tempChart.data.labels.shift();
+                        tempChart.data.datasets[0].data.shift();
+                    }
+                    tempChart.update();
+                });
+            
+            fetch('/humidity')
+                .then(response => response.text())
+                .then(humidity => {
+                    let time = new Date().toLocaleTimeString();
+                    document.getElementById("humidity").innerText = humidity;
+                    humidityChart.data.labels.push(time);
+                    humidityChart.data.datasets[0].data.push(parseFloat(humidity));
+                    if (humidityChart.data.labels.length > 10) {
+                        humidityChart.data.labels.shift();
+                        humidityChart.data.datasets[0].data.shift();
+                    }
+                    humidityChart.update();
+                });
+        }
+        
+        setInterval(updateData, 10000);
+    </script>
+</body>
+</html>
+
+ 
